@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Data
 public class User extends Entity {
-//    private int id;
+
     @NotNull
     @Email
     private String email;
