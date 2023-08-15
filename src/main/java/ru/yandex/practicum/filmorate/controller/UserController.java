@@ -2,51 +2,43 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/users")
-public class UserController {
+public class UserController extends Controller<User> {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
-    private Map<Integer, User> users = new HashMap();
-    private int id = 1;
 
-    @GetMapping
-    public Collection<User> returnAllUsers() {
-        log.info("Запрос GET /users");
-        return users.values();
+    public UserController() {
+        this.entities = new HashMap();
+        this.id = 1;
     }
 
-    @PostMapping
-    public User createUser(@Valid @RequestBody User user) {
-        log.info("Запрос POST /users");
-        user.setId(id);
+    @Override
+    public User createEntity(@Valid @RequestBody User user) {
         if (user.isNameNull()) {
             String login = user.getLogin();
             user.setName(login);
         }
-        users.put(id, user);
-        id++;
-        return user;
+        return super.createEntity(user);
     }
 
-    @PutMapping
-    public User updateUser(@Valid @RequestBody User user) {
+    @Override
+    public User updateEntity(@Valid @RequestBody User user) {
         log.info("Запрос PUT /users");
-        if (users.containsKey(user.getId())) {
+        if (entities.containsKey(user.getId())) {
             if (user.isNameNull()) {
                 String login = user.getLogin();
                 user.setName(login);
             }
-            users.put(user.getId(), user);
-            return user;
+            return super.updateEntity(user);
         }
         throw new NoSuchElementException();
     }

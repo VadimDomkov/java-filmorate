@@ -9,8 +9,8 @@ import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Data
-public class User {
-    private int id;
+public class User extends Entity {
+//    private int id;
     @NotNull
     @Email
     private String email;

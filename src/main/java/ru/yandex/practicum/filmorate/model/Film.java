@@ -9,8 +9,8 @@ import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 
 @Data
-public class Film {
-    private int id;
+public class Film extends Entity {
+ //   private int id;
     @NotBlank
     private String name;
     @Pattern(regexp = "^.{0,200}$")
