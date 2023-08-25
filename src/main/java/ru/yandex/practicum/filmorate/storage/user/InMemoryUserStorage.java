@@ -3,52 +3,85 @@ package ru.yandex.practicum.filmorate.storage.user;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.Storage;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 @Component
-public class InMemoryUserStorage implements UserStorage {
+public class InMemoryUserStorage extends Storage<User> implements UserStorage {
 
-    protected Map<Long, User> users = new HashMap<>();
-    protected long id = 1;
-
-    @Override
-    public Collection<User> returnAllUsers() {
-        return users.values();
+    public InMemoryUserStorage() {
+        this.entities = new HashMap<>();
+        this.id = 1;
     }
 
     @Override
-    public User createUser(User user) {
+    public User create(User user) {
         if (user.isNameNull()) {
             String login = user.getLogin();
             user.setName(login);
         }
-        user.setId(id);
-        users.put(id, user);
-        id++;
-        return user;
+        return super.create(user);
     }
 
     @Override
-    public User updateUser(User user) {
-        if (users.containsKey(user.getId())) {
+    public User update(User user) {
+        if (entities.containsKey(user.getId())) {
             if (user.isNameNull()) {
                 String login = user.getLogin();
                 user.setName(login);
             }
-            users.put(user.getId(), user);
-            return user;
+            return super.update(user);
         }
         throw new UserNotFoundException();
     }
 
     @Override
-    public User returnUserById(long id) {
-        if (users.containsKey(id)) {
-            return users.get(id);
+    public User returnById(long id) {
+        if (entities.containsKey(id)) {
+            return super.returnById(id);
         }
         throw new UserNotFoundException();
     }
+
+//    protected Map<Long, User> users = new HashMap<>();
+//    protected long id = 1;
+//
+//    @Override
+//    public Collection<User> returnAll() {
+//        return users.values();
+//    }
+//
+//    @Override
+//    public User create(User user) {
+//        if (user.isNameNull()) {
+//            String login = user.getLogin();
+//            user.setName(login);
+//        }
+//        user.setId(id);
+//        users.put(id, user);
+//        id++;
+//        return user;
+//    }
+//
+//    @Override
+//    public User update(User user) {
+//        if (users.containsKey(user.getId())) {
+//            if (user.isNameNull()) {
+//                String login = user.getLogin();
+//                user.setName(login);
+//            }
+//            users.put(user.getId(), user);
+//            return user;
+//        }
+//        throw new UserNotFoundException();
+//    }
+//
+//    @Override
+//    public User returnById(long id) {
+//        if (users.containsKey(id)) {
+//            return users.get(id);
+//        }
+//        throw new UserNotFoundException();
+//    }
 }

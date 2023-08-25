@@ -20,44 +20,44 @@ public class UserService {
     }
 
     public Collection<User> returnAllEntities() {
-        return userStorage.returnAllUsers();
+        return userStorage.returnAll();
     }
 
-    public User findUserById(long id) {
-        return userStorage.returnUserById(id);
+    public User findById(long id) {
+        return userStorage.returnById(id);
     }
 
     public User createEntity(User entity) {
-        return userStorage.createUser(entity);
+        return userStorage.create(entity);
     }
 
     public User updateEntity(User user) {
-        return userStorage.updateUser(user);
+        return userStorage.update(user);
     }
 
     public void addFriend(long id, long friendId) {
-        User user = userStorage.returnUserById(id);
-        User friend = userStorage.returnUserById(friendId);
+        User user = userStorage.returnById(id);
+        User friend = userStorage.returnById(friendId);
         user.addFriend(friendId);
         friend.addFriend(id);
     }
 
     public void deleteFriend(long id, long friendId) {
-        User user = userStorage.returnUserById(id);
-        User friend = userStorage.returnUserById(friendId);
+        User user = userStorage.returnById(id);
+        User friend = userStorage.returnById(friendId);
         user.removeFriend(friendId);
         friend.removeFriend(id);
     }
 
     public List<User> findFriends(long id) {
-        User user = userStorage.returnUserById(id);
-        return user.getFriends().stream().map(i -> userStorage.returnUserById(i)).collect(Collectors.toList());
+        User user = userStorage.returnById(id);
+        return user.getFriends().stream().map(i -> userStorage.returnById(i)).collect(Collectors.toList());
     }
 
     public List<User> findCommonFriends(long id, long otherId) {
-        Set<Long> userFriends = userStorage.returnUserById(id).getFriends();
-        Set<Long> secondUserFriends = userStorage.returnUserById(otherId).getFriends();
+        Set<Long> userFriends = userStorage.returnById(id).getFriends();
+        Set<Long> secondUserFriends = userStorage.returnById(otherId).getFriends();
         Set<Long> result = userFriends.stream().filter(i -> secondUserFriends.contains(i)).collect(Collectors.toSet());
-        return result.stream().map(i -> userStorage.returnUserById(i)).collect(Collectors.toList());
+        return result.stream().map(i -> userStorage.returnById(i)).collect(Collectors.toList());
     }
 }

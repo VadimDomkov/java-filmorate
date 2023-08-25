@@ -31,7 +31,7 @@ public class UserController {
     @GetMapping("/{id}")
     public User findUserById(@PathVariable long id) {
         log.info("Запрос GET /users/{" + id + "}");
-        return userService.findUserById(id);
+        return userService.findById(id);
     }
 
     @PostMapping

@@ -29,7 +29,7 @@ public class FilmController {
     @GetMapping("/{id}")
     public Film findFilmById(@PathVariable long id) {
         log.info("Запрос GET /films/{" + id + "}");
-        return filmService.findFilmById(id);
+        return filmService.findById(id);
     }
 
     @PostMapping

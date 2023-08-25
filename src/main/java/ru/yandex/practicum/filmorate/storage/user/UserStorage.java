@@ -6,11 +6,11 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.util.Collection;
 
 public interface UserStorage {
-    Collection<User> returnAllUsers();
+    Collection<User> returnAll();
 
-    User createUser(User user);
+    User create(User user);
 
-    User updateUser(User user);
+    User update(User user);
 
-    User returnUserById(long id);
+    User returnById(long id);
 }

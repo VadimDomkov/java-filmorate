@@ -17,34 +17,34 @@ public class FilmService {
     }
 
     public Collection<Film> returnAllEntities() {
-        return filmStorage.returnAllFilms();
+        return filmStorage.returnAll();
     }
 
     public Film createEntity(Film entity) {
-        return filmStorage.createFilm(entity);
+        return filmStorage.create(entity);
     }
 
     public Film updateEntity(Film film) {
-        return filmStorage.updateFilm(film);
+        return filmStorage.update(film);
     }
 
-    public Film findFilmById(long id) {
-        return filmStorage.returnFilmById(id);
+    public Film findById(long id) {
+        return filmStorage.returnById(id);
     }
 
     public void likeMovie(long id, long userId) {
-        Film film = filmStorage.returnFilmById(id);
+        Film film = filmStorage.returnById(id);
         film.addLike(userId);
     }
 
     public void unlikeMovie(long id, long userId) {
-        Film film = filmStorage.returnFilmById(id);
+        Film film = filmStorage.returnById(id);
         film.deleteLike(userId);
     }
 
     public Collection<Film> findPopular(int count) {
         Set<Film> films = new TreeSet<>(Film::compareTo);
-        films.addAll(filmStorage.returnAllFilms());
+        films.addAll(filmStorage.returnAll());
         if (films.size() > count) {
             List<Film> filmList = new ArrayList<>(films);
             List<Film> sublist = filmList.subList(0, count);
