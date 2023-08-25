@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class User extends Entity {
@@ -20,8 +22,17 @@ public class User extends Entity {
     private String name;
     @Past
     private LocalDate birthday;
+    Set<Long> friends = new HashSet<>();
 
     public boolean isNameNull() {
-        return name == null;
+        return name == null || name.isEmpty();
+    }
+
+    public void addFriend(Long id) {
+        friends.add(id);
+    }
+
+    public void removeFriend(Long id) {
+        friends.remove(id);
     }
 }
