@@ -13,6 +13,8 @@ import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -51,5 +53,14 @@ public class FilmsDbStorageTest {
                 () -> filmDbStorage.returnById(10)
         );
         Assertions.assertEquals("Фильм с id 10 не найден", ex.getMessage());
+    }
+
+    @Test
+    public void findAll() {
+        filmDbStorage.create(testFilm1);
+        filmDbStorage.create(testFilm2);
+        List<Film> films = new ArrayList<>(filmDbStorage.returnAll());
+        Assertions.assertEquals(testFilm1.getName(), films.get(0).getName());
+        Assertions.assertEquals(testFilm2.getName(), films.get(1).getName());
     }
 }
