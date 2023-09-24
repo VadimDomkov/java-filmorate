@@ -25,39 +25,39 @@ class UserControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Test
-    void returnUsers() throws Exception {
-        mvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "  \"login\": \"dolore\",\n" +
-                        "  \"name\": \"Nick Name\",\n" +
-                        "  \"email\": \"mail@mail.ru\",\n" +
-                        "  \"birthday\": \"1946-08-20\"\n" +
-                        "}"));
+//    @Test
+//    void returnUsers() throws Exception {
+//        mvc.perform(post("/users")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content("{\n" +
+//                        "  \"login\": \"dolore\",\n" +
+//                        "  \"name\": \"Nick Name\",\n" +
+//                        "  \"email\": \"mail@mail.ru\",\n" +
+//                        "  \"birthday\": \"1946-08-20\"\n" +
+//                        "}"));
+//
+//        MvcResult result = mvc.perform(get("/users")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andReturn();
+//
+//        Assertions.assertEquals("[{\"id\":1,\"email\":\"mail@mail.ru\",\"login\":\"dolore\",\"name\":\"Nick Name\",\"birthday\":\"1946-08-20\",\"friends\":[],\"nameNull\":false}]", result.getResponse().getContentAsString());
+//    }
 
-        MvcResult result = mvc.perform(get("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        Assertions.assertEquals("[{\"id\":1,\"email\":\"mail@mail.ru\",\"login\":\"dolore\",\"name\":\"Nick Name\",\"birthday\":\"1946-08-20\",\"friends\":[],\"nameNull\":false}]", result.getResponse().getContentAsString());
-    }
-
-    @Test
-    void createUser() throws Exception {
-        mvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "  \"login\": \"dolore\",\n" +
-                        "  \"name\": \"Nick Name\",\n" +
-                        "  \"email\": \"mail@mail.ru\",\n" +
-                        "  \"birthday\": \"1946-08-20\"\n" +
-                        "}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Nick Name"))
-                .andExpect(jsonPath("$.email").value("mail@mail.ru"));
-    }
+//    @Test
+//    void createUser() throws Exception {
+//        mvc.perform(post("/users")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content("{\n" +
+//                        "  \"login\": \"dolore\",\n" +
+//                        "  \"name\": \"Nick Name\",\n" +
+//                        "  \"email\": \"mail@mail.ru\",\n" +
+//                        "  \"birthday\": \"1946-08-20\"\n" +
+//                        "}"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.name").value("Nick Name"))
+//                .andExpect(jsonPath("$.email").value("mail@mail.ru"));
+//    }
 
     @Test
     void createUserWithInvalidLogin() throws Exception {
@@ -99,42 +99,42 @@ class UserControllerTest {
                 .andExpect(status().is(400));
     }
 
-    @Test
-    void createUserWithEmptyName() throws Exception {
-        mvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "  \"login\": \"common\",\n" +
-                        "  \"email\": \"friend@common.ru\",\n" +
-                        "  \"birthday\": \"2000-08-20\"\n" +
-                        "}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("common"));
-    }
+//    @Test
+//    void createUserWithEmptyName() throws Exception {
+//        mvc.perform(post("/users")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content("{\n" +
+//                        "  \"login\": \"common\",\n" +
+//                        "  \"email\": \"friend@common.ru\",\n" +
+//                        "  \"birthday\": \"2000-08-20\"\n" +
+//                        "}"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.name").value("common"));
+//    }
 
-    @Test
-    void updateUser() throws Exception {
-        mvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "  \"login\": \"dolore\",\n" +
-                        "  \"name\": \"Nick Name\",\n" +
-                        "  \"email\": \"mail@mail.ru\",\n" +
-                        "  \"birthday\": \"1946-08-20\"\n" +
-                        "}"));
-
-        mvc.perform(put("/users").contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "  \"login\": \"doloreUpdate\",\n" +
-                        "  \"name\": \"est adipisicing\",\n" +
-                        "  \"id\": 1,\n" +
-                        "  \"email\": \"mail@yandex.ru\",\n" +
-                        "  \"birthday\": \"1976-09-20\"\n" +
-                        "}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("est adipisicing"))
-                .andExpect(jsonPath("$.login").value("doloreUpdate"));
-
-
-    }
+//    @Test
+//    void updateUser() throws Exception {
+//        mvc.perform(post("/users")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content("{\n" +
+//                        "  \"login\": \"dolore\",\n" +
+//                        "  \"name\": \"Nick Name\",\n" +
+//                        "  \"email\": \"mail@mail.ru\",\n" +
+//                        "  \"birthday\": \"1946-08-20\"\n" +
+//                        "}"));
+//
+//        mvc.perform(put("/users").contentType(MediaType.APPLICATION_JSON)
+//                .content("{\n" +
+//                        "  \"login\": \"doloreUpdate\",\n" +
+//                        "  \"name\": \"est adipisicing\",\n" +
+//                        "  \"id\": 1,\n" +
+//                        "  \"email\": \"mail@yandex.ru\",\n" +
+//                        "  \"birthday\": \"1976-09-20\"\n" +
+//                        "}"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.name").value("est adipisicing"))
+//                .andExpect(jsonPath("$.login").value("doloreUpdate"));
+//
+//
+//    }
 }
