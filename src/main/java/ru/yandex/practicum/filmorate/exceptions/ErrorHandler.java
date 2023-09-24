@@ -5,6 +5,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.Map;
 
@@ -13,14 +15,26 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> handleFilmNotFound(final FilmNotFoundException e) {
-        return Map.of("Такого фильма нет", e.getMessage());
+    public String handleElementNotFound(final ElementNotFoundException e) {
+        return e.getMessage();
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> handleUserNotFound(final UserNotFoundException e) {
-        return Map.of("Такого пользователя нет", e.getMessage());
+    public Film handleFilmNotFound(final FilmNotFoundException e) {
+        return e.getFilm();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public User handleUserNotFound(final UserNotFoundException e) {
+        return e.getUser();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleEntryAlreadyExistsException(final EntryAlreadyExistsException e) {
+        return e.getMessage();
     }
 
     @ExceptionHandler

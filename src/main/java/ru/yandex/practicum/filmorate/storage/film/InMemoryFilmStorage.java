@@ -5,6 +5,8 @@ import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.Storage;
 
+import java.util.Collection;
+
 
 @Component
 public class InMemoryFilmStorage extends Storage<Film> implements FilmStorage {
@@ -23,5 +25,20 @@ public class InMemoryFilmStorage extends Storage<Film> implements FilmStorage {
             return super.returnById(id);
         }
         throw new FilmNotFoundException();
+    }
+
+    @Override
+    public void addLike(long filmId, long userId) {
+
+    }
+
+    @Override
+    public void deleteLike(long filmId, long userId) {
+
+    }
+
+    @Override
+    public Collection<Film> getPopularFilms(int count) {
+        return null;
     }
 }

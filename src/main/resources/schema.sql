@@ -1,0 +1,64 @@
+--DROP ALL OBJECTS;
+DROP TABLE IF EXISTS FILMS CASCADE;
+DROP TABLE IF EXISTS FRIENDS CASCADE;
+DROP TABLE IF EXISTS GENRES CASCADE;
+DROP TABLE IF EXISTS LIKES CASCADE;
+DROP TABLE IF EXISTS USERS  CASCADE;
+DROP TABLE IF EXISTS MPA CASCADE;
+DROP TABLE IF EXISTS Genres_To_Films  CASCADE;
+
+
+CREATE TABLE IF NOT EXISTS Users (
+    User_Id IDENTITY NOT NULL PRIMARY KEY,
+    Email varchar(200) NOT NULL,
+    Login varchar(200),
+    Username varchar(200),
+    Birthdate date
+    );
+
+CREATE TABLE IF NOT EXISTS Films (
+    Film_Id IDENTITY NOT NULL PRIMARY KEY,
+    Name varchar(200) not null,
+    Description varchar(200),
+    Release_date date,
+    Duration smallint,
+    MPA_Id smallint
+    );
+
+CREATE TABLE IF NOT EXISTS Friends (
+    User_Id bigint,
+    Friend_Id bigint,
+    Accepted boolean DEFAULT false,
+    CONSTRAINT PK_user_friend PRIMARY KEY (User_Id, Friend_Id)
+    );
+
+CREATE TABLE IF NOT EXISTS Likes (
+    Film_Id bigint,
+    User_Id bigint,
+    CONSTRAINT PK_film_user PRIMARY KEY (Film_Id, User_Id)
+    );
+
+CREATE TABLE IF NOT EXISTS Genres (
+    Genre_Id IDENTITY NOT NULL PRIMARY KEY,
+    Genre varchar(200)
+    );
+
+CREATE TABLE IF NOT EXISTS Genres_To_Films (
+    Id IDENTITY NOT NULL PRIMARY KEY,
+    Film_Id bigint,
+    Genre_Id smallint
+    );
+
+CREATE TABLE IF NOT EXISTS MPA (
+    MPA_Id IDENTITY NOT NULL PRIMARY KEY,
+    MPA_Name varchar(10)
+    );
+
+ALTER TABLE Friends ADD CONSTRAINT IF NOT EXISTS FK_User_Friend FOREIGN KEY (User_Id) REFERENCES Users(User_Id);
+ALTER TABLE Friends ADD CONSTRAINT IF NOT EXISTS  FK_Friend_User FOREIGN KEY (Friend_Id) REFERENCES Users(User_Id);
+ALTER TABLE Likes ADD CONSTRAINT IF NOT EXISTS  FK_User_Like FOREIGN KEY (User_Id) REFERENCES Users(User_Id);
+ALTER TABLE Likes ADD CONSTRAINT IF NOT EXISTS  FK_Film_Like FOREIGN KEY (Film_Id) REFERENCES Films(Film_Id);
+ALTER TABLE Films ADD CONSTRAINT IF NOT EXISTS FK_Film_MPA FOREIGN KEY (MPA_Id) REFERENCES MPA(MPA_Id);
+ALTER TABLE Genres_To_Films ADD CONSTRAINT IF NOT EXISTS FK_Film FOREIGN KEY (Film_Id) REFERENCES Films(Film_Id);
+ALTER TABLE Genres_To_Films ADD CONSTRAINT IF NOT EXISTS FK_Genre FOREIGN KEY (Genre_Id) REFERENCES Genres(Genre_Id);
+ALTER TABLE Friends ADD CONSTRAINT UQ_UserId_FriendId UNIQUE (User_Id, Friend_Id);
