@@ -37,35 +37,21 @@ public class UserService {
     }
 
     public void addFriend(long id, long friendId) {
-//        User user = userStorage.returnById(id);
-//        User friend = userStorage.returnById(friendId);
-//        user.addFriend(friendId);
-//        friend.addFriend(id);
         userStorage.addFriend(id, friendId);
     }
 
     public void deleteFriend(long id, long friendId) {
-//        User user = userStorage.returnById(id);
-//        User friend = userStorage.returnById(friendId);
-//        user.removeFriend(friendId);
-//        friend.removeFriend(id);
         userStorage.deleteFriend(id, friendId);
     }
 
     public List<User> findFriends(long id) {
-//        User user = userStorage.returnById(id);
         return userStorage.getFriends(id).stream().map(i -> userStorage.returnById(i)).collect(Collectors.toList());
     }
 
     public List<User> findCommonFriends(long id, long otherId) {
-//        Set<Long> userFriends = userStorage.returnById(id).getFriends();
-//        Set<Long> secondUserFriends = userStorage.returnById(otherId).getFriends();
-//        Set<Long> result = userFriends.stream().filter(i -> secondUserFriends.contains(i)).collect(Collectors.toSet());
-//        return result.stream().map(i -> userStorage.returnById(i)).collect(Collectors.toList());
         Set<Long> userFriends = userStorage.getFriends(id);
         Set<Long> secondUserFriends = userStorage.getFriends(otherId);
         Set<Long> result = userFriends.stream().filter(i -> secondUserFriends.contains(i)).collect(Collectors.toSet());
         return result.stream().map(i -> userStorage.returnById(i)).collect(Collectors.toList());
-
     }
 }

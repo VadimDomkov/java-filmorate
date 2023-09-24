@@ -24,7 +24,7 @@ public class MpaController {
     }
 
     @GetMapping
-    public Collection<MPA> returnAll () {
+    public Collection<MPA> returnAll() {
         return mpaService.findAll();
     }
 

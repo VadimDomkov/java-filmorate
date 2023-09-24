@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class UserDbStorage implements UserStorage{
+public class UserDbStorage implements UserStorage {
     private final Logger log = LoggerFactory.getLogger(FilmDbStorage.class);
 
     private final JdbcTemplate jdbcTemplate;
@@ -74,7 +74,7 @@ public class UserDbStorage implements UserStorage{
         }
         String sqlQuery = "update users set email = ?, login = ?, username = ?, birthdate = ? " +
                 "where user_id = ?";
-        try{
+        try {
             String sqlSelect = "select * from Users where user_id = ?";
             jdbcTemplate.queryForObject(sqlSelect, this::mapRowToUser, user.getId());
             jdbcTemplate.update(sqlQuery, user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), user.getId());

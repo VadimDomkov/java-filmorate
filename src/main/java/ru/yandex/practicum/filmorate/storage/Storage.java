@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Storage<T extends Entity> {
-    protected Map<Long, T> entities = new HashMap<>() ;
+    protected Map<Long, T> entities = new HashMap<>();
     protected long id = 1;
 
     public Collection<T> returnAll() {

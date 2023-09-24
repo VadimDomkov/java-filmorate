@@ -42,14 +42,13 @@ public class FilmService {
     }
 
     public Collection<Film> findPopular(int count) {
-//        Set<Film> films = new TreeSet<>(Film::compareTo);
-//        films.addAll(filmStorage.returnAll());
-//        if (films.size() > count) {
-//            List<Film> filmList = new ArrayList<>(films);
-//            List<Film> sublist = filmList.subList(0, count);
-//            return filmList.subList(0, count);
-//        }
-//        return films;
-        return filmStorage.getPopularFilms(count);
+        Set<Film> films = new TreeSet<>(Film::compareTo);
+        films.addAll(filmStorage.returnAll());
+        if (films.size() > count) {
+            List<Film> filmList = new ArrayList<>(films);
+            List<Film> sublist = filmList.subList(0, count);
+            return filmList.subList(0, count);
+        }
+        return films;
     }
 }

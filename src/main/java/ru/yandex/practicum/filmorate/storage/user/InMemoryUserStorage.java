@@ -5,7 +5,6 @@ import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.Storage;
 
-import java.util.HashMap;
 import java.util.Set;
 
 @Component
