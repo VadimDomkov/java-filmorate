@@ -27,7 +27,7 @@ public class FilmsDbStorageTest {
             .mpa(MPA.builder().id(1).build())
             .build();
 
-    private Film testFilm2 =  Film.builder()
+    private Film testFilm2 = Film.builder()
             .name("filmname2")
             .description("description2")
             .duration(150)
