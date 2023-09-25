@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -18,9 +19,7 @@ import ru.yandex.practicum.filmorate.model.MPA;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -35,7 +34,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Collection<Film> returnAll() {
-        String sqlQuery = "select * from Films";
+        String sqlQuery = "SELECT f.*, m.MPA_NAME FROM FILMS f JOIN MPA m ON f.MPA_ID = m.MPA_ID";
 
         return jdbcTemplate.query(sqlQuery, this::mapRowToFilm);
     }
@@ -67,33 +66,51 @@ public class FilmDbStorage implements FilmStorage {
 
     private void updateGenres(long filmId, Set<Genre> genres) {
         String deleteQuery = "delete from Genres_To_Films where Film_Id = ?";
-        String updateQuery = "insert into Genres_To_Films (Film_Id, Genre_Id) values (?, ?)";
         jdbcTemplate.update(deleteQuery, filmId);
-        genres.stream().forEach(i -> jdbcTemplate.update(updateQuery, filmId, i.getId()));
+
+        List<Genre> genreList = new ArrayList<>(genres);
+        jdbcTemplate.batchUpdate(
+                "insert into Genres_To_Films (Film_Id, Genre_Id) values (?, ?)",
+                new BatchPreparedStatementSetter() {
+                    @Override
+                    public void setValues(PreparedStatement ps, int i) throws SQLException {
+                        Genre genre = genreList.get(i);
+                        ps.setLong(1, filmId);
+                        ps.setInt(2, genre.getId());
+                    }
+
+                    @Override
+                    public int getBatchSize() {
+                        return genreList.size();
+                    }
+                }
+        );
     }
 
     @Override
     public Film update(Film film) {
         String sqlQuery = "update films set name = ?, description = ?, release_date = ?, duration = ?, MPA_Id = ?" +
                 "where film_id = ?";
+        // Проверка на попытку сделать UPDATE несуществующего фильма
         try {
-            String sqlSelect = "select * from Films where film_id = ?";
+            String sqlSelect = "SELECT f.*, m.MPA_NAME FROM FILMS f JOIN MPA m ON f.MPA_ID = m.MPA_ID WHERE f.FILM_ID = ?";
             jdbcTemplate.queryForObject(sqlSelect, this::mapRowToFilm, film.getId());
-            jdbcTemplate.update(sqlQuery, film.getName(), film.getDescription(), film.getReleaseDate().toString(), film.getDuration(), film.getMpa().getId(), film.getId());
-            if (film.getGenres() != null) {
-                updateGenres(film.getId(), film.getGenres());
-            }
-            film.setGenres(getGenres(film.getId()));
-            return film;
         } catch (EmptyResultDataAccessException e) {
             throw new FilmNotFoundException(film);
         }
+        jdbcTemplate.update(sqlQuery, film.getName(), film.getDescription(), film.getReleaseDate().toString(), film.getDuration(), film.getMpa().getId(), film.getId());
+        if (film.getGenres() != null) {
+            updateGenres(film.getId(), film.getGenres());
+        }
+        film.setGenres(getGenres(film.getId()));
+        return film;
+
 
     }
 
     @Override
     public Film returnById(long id) {
-        String sqlQuery = "select * from Films where film_id = ?";
+        String sqlQuery = "SELECT f.*, m.MPA_NAME FROM FILMS f JOIN MPA m ON f.MPA_ID = m.MPA_ID WHERE f.FILM_ID = ?";
         try {
             return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToFilm, id);
         } catch (EmptyResultDataAccessException e) {
@@ -103,13 +120,12 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private Film mapRowToFilm(ResultSet resultSet, int rowNum) throws SQLException {
-        int mpaId = resultSet.getInt("MPA_Id");
         Film film = Film.builder()
                 .name(resultSet.getString("name"))
                 .description(resultSet.getString("description"))
                 .duration(resultSet.getInt("duration"))
                 .releaseDate(resultSet.getDate("release_date").toLocalDate())
-                .mpa(MPA.builder().id(mpaId).name(getMpaName(mpaId)).build())
+                .mpa(MPA.builder().id(resultSet.getInt("MPA_Id")).name(resultSet.getString("MPA_Name")).build())
                 .build();
         long filmId = resultSet.getLong("film_id");
         film.setId(filmId);
