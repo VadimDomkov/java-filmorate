@@ -24,4 +24,14 @@ public class InMemoryFilmStorage extends Storage<Film> implements FilmStorage {
         }
         throw new FilmNotFoundException();
     }
+
+    @Override
+    public void addLike(long filmId, long userId) {
+
+    }
+
+    @Override
+    public void deleteLike(long filmId, long userId) {
+
+    }
 }

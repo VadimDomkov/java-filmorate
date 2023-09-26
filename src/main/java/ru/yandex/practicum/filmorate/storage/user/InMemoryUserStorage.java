@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.Storage;
 
-import java.util.HashMap;
+import java.util.Set;
 
 @Component
 public class InMemoryUserStorage extends Storage<User> implements UserStorage {
@@ -37,5 +37,20 @@ public class InMemoryUserStorage extends Storage<User> implements UserStorage {
             return super.returnById(id);
         }
         throw new UserNotFoundException();
+    }
+
+    @Override
+    public void addFriend(long id, long friendId) {
+        return;
+    }
+
+    @Override
+    public void deleteFriend(long id, long friendId) {
+
+    }
+
+    @Override
+    public Set<Long> getFriends(long id) {
+        return null;
     }
 }

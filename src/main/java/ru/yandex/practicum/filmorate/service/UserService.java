@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
@@ -15,7 +16,7 @@ public class UserService {
     private final UserStorage userStorage;
 
     @Autowired
-    public UserService(UserStorage userStorage) {
+    public UserService(@Qualifier("userDbStorage") UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -36,27 +37,20 @@ public class UserService {
     }
 
     public void addFriend(long id, long friendId) {
-        User user = userStorage.returnById(id);
-        User friend = userStorage.returnById(friendId);
-        user.addFriend(friendId);
-        friend.addFriend(id);
+        userStorage.addFriend(id, friendId);
     }
 
     public void deleteFriend(long id, long friendId) {
-        User user = userStorage.returnById(id);
-        User friend = userStorage.returnById(friendId);
-        user.removeFriend(friendId);
-        friend.removeFriend(id);
+        userStorage.deleteFriend(id, friendId);
     }
 
     public List<User> findFriends(long id) {
-        User user = userStorage.returnById(id);
-        return user.getFriends().stream().map(i -> userStorage.returnById(i)).collect(Collectors.toList());
+        return userStorage.getFriends(id).stream().map(i -> userStorage.returnById(i)).collect(Collectors.toList());
     }
 
     public List<User> findCommonFriends(long id, long otherId) {
-        Set<Long> userFriends = userStorage.returnById(id).getFriends();
-        Set<Long> secondUserFriends = userStorage.returnById(otherId).getFriends();
+        Set<Long> userFriends = userStorage.getFriends(id);
+        Set<Long> secondUserFriends = userStorage.getFriends(otherId);
         Set<Long> result = userFriends.stream().filter(i -> secondUserFriends.contains(i)).collect(Collectors.toSet());
         return result.stream().map(i -> userStorage.returnById(i)).collect(Collectors.toList());
     }

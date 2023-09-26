@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.Builder;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.validator.FilmDate;
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@Builder
 public class Film extends Entity {
 
     @NotBlank
@@ -22,7 +24,9 @@ public class Film extends Entity {
     private LocalDate releaseDate;
     @Positive
     private int duration;
-    Set<Long> likes = new HashSet<>();
+    private Set<Long> likes = new HashSet<>();
+    private MPA mpa;
+    private Set<Genre> genres;
 
     public void addLike(long id) {
         likes.add(id);
